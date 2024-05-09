@@ -6,6 +6,7 @@ from llama_index.core import (
     SimpleDirectoryReader
 )
 
+from llama_index.embeddings.gemini import GeminiEmbedding
 import google.generativeai as genai
 
 import dotenv
