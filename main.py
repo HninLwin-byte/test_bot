@@ -23,8 +23,7 @@ st.caption(":violet[what a] :orange[good day] :violet[to share what SCG is offer
 # st.title("KMUTT & SCG Chatbot")
 # add_logo("scg_logo.jpg")
 # add sidebar buttons
-st.sidebar.button("Button")
-st.sidebar.button("Button 2")
+
 
 # add sidebar filters
 st.sidebar.slider("Slider", 0, 100, 50)
