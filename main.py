@@ -18,7 +18,7 @@ dotenv.load_dotenv()
 
 st.set_page_config(page_title="Chat with the Streamlit docs, powered by LlamaIndex", page_icon="🦙", layout="centered", initial_sidebar_state="auto", menu_items=None)
 st.title("KMUTT & SCG Chatbot")
-add_logo("scg_log.jpg")
+add_logo("scg_logo.jpg")
 # add sidebar buttons
 st.sidebar.button("Button")
 st.sidebar.button("Button 2")
