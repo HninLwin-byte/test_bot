@@ -15,10 +15,13 @@ import google.generativeai as genai
 import dotenv,os
 dotenv.load_dotenv()
 
-
-st.set_page_config(page_title="Chat with the Streamlit docs, powered by LlamaIndex", page_icon="🦙", layout="centered", initial_sidebar_state="auto", menu_items=None)
-st.title("KMUTT & SCG Chatbot")
-add_logo("scg_logo.jpg")
+st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.header(":violet[Chat]Bot",divider='rainbow', help = "This bot is designed by Ujjwal Deep to address all of your questions hehe")
+st.subheader("Hello! There, How can I help you Today- 👩‍💻")
+st.caption(":violet[what a] :orange[good day] :violet[it is] :violet[today] :blue[ᓚᘏᗢ]")
+# st.set_page_config(page_title="Chat with the Streamlit docs, powered by LlamaIndex", page_icon="🦙", layout="centered", initial_sidebar_state="auto", menu_items=None)
+# st.title("KMUTT & SCG Chatbot")
+# add_logo("scg_logo.jpg")
 # add sidebar buttons
 st.sidebar.button("Button")
 st.sidebar.button("Button 2")
