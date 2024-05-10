@@ -21,7 +21,7 @@ col1, col2 = st.columns([5, 1])
 # Display the logo in the first column
 with col1:
     st.image('scg_logo.jpg', width=120)
-    st.image('kmutt_logo.png', width=120)
+    
     
     st.header(":violet[SCG & KMUTT Chat]Bot",divider='rainbow', help = "This bot is designed by Ujjwal Deep to address all of your questions hehe")
 
