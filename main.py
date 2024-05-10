@@ -15,19 +15,34 @@ import google.generativeai as genai
 import dotenv,os
 dotenv.load_dotenv()
 
-st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"kmutt_logo.png", layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
 st.header(":violet[SCG & KMUTT Chat]Bot",divider='rainbow', help = "This bot is designed by Ujjwal Deep to address all of your questions hehe")
-st.subheader("Hello! There, How can I help you Today- 👩‍💻")
-st.caption(":violet[what a] :orange[good day] :violet[to share what SCG is offering right now]:blue[ᓚᘏᗢ]")
+# st.subheader("Hello! There, How can I help you Today- :)")
+
+
+col1, col2 = st.columns([1, 3])
+
+# Display the logo in the first column
+with col1:
+    st.image('scg_logo.jpg', width=60)
+
+# Display the text in the second column
+with col2:
+    st.subheader("Hello! There, How can I help you Today-  :)")
+   
+
+st.caption(":violet[what a] :orange[good day] :violet[to share what SCG is offering right now!]")
+
+
 # st.set_page_config(page_title="Chat with the Streamlit docs, powered by LlamaIndex", page_icon="🦙", layout="centered", initial_sidebar_state="auto", menu_items=None)
 # st.title("KMUTT & SCG Chatbot")
-# add_logo("scg_logo.jpg")
+
 # add sidebar buttons
 
 
 # add sidebar filters
-st.sidebar.slider("Slider", 0, 100, 50)
-st.sidebar.date_input("Date Input")
+# st.sidebar.slider("Slider", 0, 100, 50)
+# st.sidebar.date_input("Date Input")
 # openai.api_key = st.secrets.openai_key
 GOOGLE_API_KEY=os.environ.get('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
@@ -65,6 +80,14 @@ for message in st.session_state.messages: # Display the prior chat messages
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
+# for message in st.session_state.messages:
+#     with st.container():
+#         if message["role"] == "assistant":
+#             st.image('scg_logo.jpg', width=30)
+#             st.write("ChatBot:", message["content"])
+#         else:
+#             st.write("You:", message["content"])
+
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
@@ -73,3 +96,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
             st.write(response.response)
             message = {"role": "assistant", "content": response.response}
             st.session_state.messages.append(message) # Add response to message history
+
+
+
+
