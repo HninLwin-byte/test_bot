@@ -14,6 +14,9 @@ import google.generativeai as genai
 
 import dotenv,os
 dotenv.load_dotenv()
+
+
+st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
 st.markdown(
     """
     <style>
@@ -25,7 +28,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
 col1, col2 = st.columns([5, 1])
 
 # Display the logo in the first column
