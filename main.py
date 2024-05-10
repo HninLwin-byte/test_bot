@@ -24,7 +24,7 @@ col1, col2 = st.columns([1, 3])
 
 # Display the logo in the first column
 with col1:
-    st.image('scg_logo.jpg', width=60)
+    st.image('scg_logo.jpg', width=100)
 
 # Display the text in the second column
 with col2:
