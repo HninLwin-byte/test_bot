@@ -10,4 +10,6 @@ PyPDF2
 langchain
 faiss-cpu
 transformers
+torch 
+torchvision
 
