@@ -12,10 +12,18 @@ from llama_index.core import (
 from streamlit_extras.app_logo import add_logo
 import google.generativeai as genai
 
+from transformers import AutoModelForQuestionAnswering, AutoTokenizer
+
+
+# Create a new service context based on Hugging Face's Transformers
+
+
+
 import dotenv,os
 dotenv.load_dotenv()
 
-
+tokenizer = AutoTokenizer.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
+model = AutoModelForQuestionAnswering.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
 
 
 
@@ -88,8 +96,7 @@ def load_data():
             model_name="models/embedding-001", title="this is a document"
             )
         # service_context = ServiceContext.from_defaults(llm = Gemini(model="models/gemini-pro"), embed_model=embed_model,)
-        service_context = ServiceContext.from_defaults(llm = Gemini(model="models/gemini-lite"), embed_model=embed_model)
-
+        service_context = ServiceContext.from_defaults(llm=model, embed_model=embed_model)
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
         return index
