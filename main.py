@@ -20,7 +20,7 @@ dotenv.load_dotenv()
 
 
 
-st.set_page_config(page_title="UjjwalDeepXIXC", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(page_title="SCG&KMUTT chatbot", page_icon=r"scg_logo.jpg", layout="centered", initial_sidebar_state="auto", menu_items=None)
 st.markdown(
     """
     <style>
