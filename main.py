@@ -15,13 +15,6 @@ import google.generativeai as genai
 import dotenv,os
 dotenv.load_dotenv()
 
-from llama_index.core import VectorStoreIndex, StorageContext
-from llama_index.embeddings.gemini import GeminiEmbedding
-from llama_index.llms.gemini import Gemini
-from llama_index.vector_stores.qdrant import QdrantVectorStore
-from llama_index.core import Settings
-from llama_index.core import StorageContext
-import qdrant_client
 
 
 
@@ -90,29 +83,13 @@ def load_data():
         docs = reader.load_data()
         # # llm = OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert o$
         # # index = VectorStoreIndex.from_documents(docs)
-        # # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."))
-        # embed_model = GeminiEmbedding(
-        #     model_name="models/embedding-001", title="this is a document"
-        #     )
-        # service_context = ServiceContext.from_defaults(llm = Gemini(model="models/gemini-pro"), embed_model=embed_model,)
-        #index = VectorStoreIndex.from_documents(docs, service_context=service_context)
-        # Create a local Qdrant vector store
-        client = qdrant_client.QdrantClient(path="qdrant_gemini_3")
+        # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."))
+        embed_model = GeminiEmbedding(
+            model_name="models/embedding-001", title="this is a document"
+            )
+        service_context = ServiceContext.from_defaults(llm = Gemini(model="models/gemini-pro"), embed_model=embed_model,)
+        index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
-        vector_store = QdrantVectorStore(client=client, collection_name="collection")
-        
-        # Using the embedding model to Gemini
-        Settings.embed_model = GeminiEmbedding(
-            model_name="models/embedding-001", api_key=GOOGLE_API_KEY
-        )
-        Settings.llm = Gemini(api_key=GOOGLE_API_KEY)
-        
-        storage_context = StorageContext.from_defaults(vector_store=vector_store)
-        
-        index = VectorStoreIndex(
-            nodes=docs,
-            storage_context=storage_context,
-        )
         return index
 
 index = load_data()
