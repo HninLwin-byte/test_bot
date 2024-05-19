@@ -8,4 +8,5 @@ google-generativeai
 streamlit_extras
 PyPDF2
 langchain
+faiss-cpu
 
