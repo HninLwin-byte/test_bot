@@ -6,3 +6,4 @@ openai
 python-dotenv
 google-generativeai
 streamlit_extras
+PyPDF2
