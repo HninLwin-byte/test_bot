@@ -92,8 +92,7 @@ def load_data():
             model_name="models/embedding-001", title="this is a document"
         )
         
-        model = GenerativeModel("gemini-pro")
-
+        genai.GenerativeModel("gemini-pro")
         # Check if GenerativeModel has system_prompt attribute
         if hasattr(model, 'system_prompt'):
             model.system_prompt = "You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."
