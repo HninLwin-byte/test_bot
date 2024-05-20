@@ -266,7 +266,7 @@ def load_data():
         # service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
         # index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
-        return index
+        
 
 index = load_data()
 
