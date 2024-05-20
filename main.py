@@ -85,25 +85,30 @@ if "messages" not in st.session_state.keys(): # Initialize the chat messages his
 @st.cache_resource(show_spinner=False)
 
 def load_data():
-    with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
-        reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
-        docs = reader.load_data()
-        
-        embed_model = GeminiEmbedding(
-            model_name="models/embedding-001", title="this is a document"
-        )
-        
-        model = genai.GenerativeModel("gemini-pro")
-        # Check if GenerativeModel has system_prompt attribute
-        if hasattr(model, 'system_prompt'):
-            model.system_prompt = "You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."
-        
-        service_context = ServiceContext.from_defaults(llm=model, embed_model=embed_model)
-        
-        index = VectorStoreIndex.from_documents(docs, service_context=service_context)
-        
-        return index
+    try:
+        with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
+            reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
+            docs = reader.load_data()
+            
+            embed_model = GeminiEmbedding(
+                model_name="models/embedding-001", title="this is a document"
+            )
+            
+            model = genai.GenerativeModel("gemini-pro")
 
+            # Check if GenerativeModel has system_prompt attribute
+            if hasattr(model, 'system_prompt'):
+                model.system_prompt = "You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."
+            
+            service_context = ServiceContext.from_defaults(llm=model, embed_model=embed_model)
+            
+            index = VectorStoreIndex.from_documents(docs, service_context=service_context)
+            
+            return index
+    
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return None
 index = load_data()
 # def load_data():
 #     with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
