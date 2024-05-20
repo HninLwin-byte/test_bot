@@ -11,7 +11,7 @@ from llama_index.core import (
 )
 from streamlit_extras.app_logo import add_logo
 import google.generativeai as genai
-from llama_index.llms import HuggingFaceLLM
+from llama_index.llms.huggingface import HuggingFaceLLM
 
 # Create a new service context based on Hugging Face's Transformers
 
