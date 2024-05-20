@@ -20,8 +20,7 @@ from llama_index.llms import HuggingFaceLLM
 import dotenv,os
 dotenv.load_dotenv()
 
-tokenizer = AutoTokenizer.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
-model = AutoModelForQuestionAnswering.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
+
 
 
 
