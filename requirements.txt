@@ -9,3 +9,6 @@ streamlit_extras
 PyPDF2
 langchain
 llama-index-llms-huggingface
+transformers
+torch 
+accelerate
