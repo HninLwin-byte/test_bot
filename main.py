@@ -146,143 +146,52 @@
 #             message = {"role": "assistant", "content": response.response}
 #             st.session_state.messages.append(message) # Add response to message history
 
+#Import All the Required Libraries
 import streamlit as st
-import openai
-from llama_index.llms.openai import OpenAI
-from llama_index.llms.gemini import Gemini
-from llama_index.embeddings.gemini import GeminiEmbedding
-from llama_index.core import (
-    VectorStoreIndex, 
-    ServiceContext, 
-    Document, 
-    SimpleDirectoryReader
-)
-from streamlit_extras.app_logo import add_logo
 import google.generativeai as genai
-from llama_index.llms.huggingface import HuggingFaceLLM
-import torch
-import dotenv
+from PIL import Image
 import os
-from llama_index.core import Settings
-from llama_index.core import PromptTemplate
+from dotenv import load_dotenv
+load_dotenv()
 
-dotenv.load_dotenv()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-st.set_page_config(
-    page_title="SCG&KMUTT chatbot", 
-    page_icon=r"scg_logo.jpg", 
-    layout="centered", 
-    initial_sidebar_state="auto", 
-    menu_items=None
-)
+#Load the Gemini Pro Vision Model
+model = genai.GenerativeModel('gemini-pro-vision')
 
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: #e6f7ff;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+def get_gemini_respone(input_prompt, image, user_input_prompt):
+    response = model.generate_content([input_prompt, image[0], user_input_prompt])
+    return response.text
 
-col1, col2 = st.columns([5, 1])
+def input_image_bytes(uploaded_file):
+    if uploaded_file is not None:
+        #Convert the Uploaded File into bytes
+        bytes_data = uploaded_file.getvalue()
+        image_parts = [
+            {
+                "mime_type": uploaded_file.type,
+                "data": bytes_data
+            }
+        ]
+        return  image_parts
+    else:
+        raise FileNotFoundError("No File Uploaded")
 
-with col1:
-    st.image('scg_logo.jpg', width=120)
-    st.header(":violet[SCG & KMUTT Chat]Bot", divider='rainbow', help="This bot is designed by Ujjwal Deep to address all of your questions hehe")
-
-st.subheader("Hello! There, How can I help you Today-  :)")
-st.caption(":violet[what a] :orange[good day] :violet[to share what SCG is offering right now!]")
-
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY')
-genai.configure(api_key=GOOGLE_API_KEY)
-
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [
-        {"role": "assistant", "content": "Ask me a question about Concrete technology"}
-    ]
-
-@st.cache_resource(show_spinner=False)
-def load_data():
-    with st.spinner(text="Loading and indexing the Streamlit docs – hang tight! This should take 1-2 minutes."):
-        reader = SimpleDirectoryReader(input_dir="./data", recursive=True)
-        docs = reader.load_data()
-        
-        embed_model = GeminiEmbedding(
-            model_name="models/embedding-001", title="this is a document"
-        )
-
-        system_prompt = """<|SYSTEM|># StableLM Tuned (Alpha version)
-- StableLM is a helpful and harmless open-source AI language model developed by StabilityAI.
-- StableLM is excited to be able to help the user, but will refuse to do anything that could be considered harmful to the user.
-- StableLM is more than just an information source, StableLM is also able to write poetry, short stories, and make jokes.
-- StableLM will refuse to participate in anything that could harm a human.
+# Initialize the Streamlit App
+st.set_page_config(page_title="MultiLanguage Invoice Extractor")
+input_prompt = """
+You are an expert in understanding invoices. Please try to answer the question using the information from the uploaded
+invoice.
 """
+user_input_prompt = st.text_input("User Input Prompt", key="input")
+upload_image_file = st.file_uploader("Choice an Image of the Invoice", type=["jpg", "jpeg", "png"])
+if upload_image_file is not None:
+    image = Image.open(upload_image_file)
+    st.image(image, caption = "Uploaded Image", use_column_width=True)
 
-        # This will wrap the default prompts that are internal to llama-index
-        query_wrapper_prompt = PromptTemplate("<|USER|>{query_str}<|ASSISTANT|>")
-        llm = HuggingFaceLLM(
-            context_window=4096,
-            max_new_tokens=256,
-            generate_kwargs={"temperature": 0.7, "do_sample": False},
-            system_prompt=system_prompt,
-            query_wrapper_prompt=query_wrapper_prompt,
-            tokenizer_name="StabilityAI/stablelm-tuned-alpha-3b",
-            model_name="StabilityAI/stablelm-tuned-alpha-3b",
-            device_map="auto",
-            stopping_ids=[50278, 50279, 50277, 1, 0],
-            tokenizer_kwargs={"max_length": 4096},
-        )
-
-        # Set the embedding model in the Settings
-        Settings.embed_model = embed_model
-
-        # Initialize the vector store index with the embedding model
-        index = VectorStoreIndex.from_documents(docs)
-
-        return index
-
-        # llm = HuggingFaceLLM(
-        #     context_window=4096,
-        #     max_new_tokens=256,
-        #     generate_kwargs={"temperature": 0.7, "do_sample": False},
-        #     system_prompt=system_prompt,
-        #     query_wrapper_prompt=query_wrapper_prompt,
-        #     tokenizer_name="StabilityAI/stablelm-tuned-alpha-3b",
-        #     model_name="StabilityAI/stablelm-tuned-alpha-3b",
-        #     device_map="auto",
-        #     stopping_ids=[50278, 50279, 50277, 1, 0],
-        #     tokenizer_kwargs={"max_length": 4096},
-        #     # uncomment this if using CUDA to reduce memory usage
-        #     # model_kwargs={"torch_dtype": torch.float16}
-        # )
-        
-        # Settings.llm = llm
-        # Settings.chunk_size = 1024
-        # index = VectorStoreIndex.from_documents(docs)
-
-        # service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
-        # index = VectorStoreIndex.from_documents(docs, service_context=service_context)
-        
-        
-
-index = load_data()
-
-if "chat_engine" not in st.session_state.keys():
-    st.session_state.chat_engine = index.as_chat_engine(chat_mode="condense_question", verbose=True)
-
-if prompt := st.chat_input("Your question"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
-
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            response = st.session_state.chat_engine.chat(st.session_state.messages[-1]["content"])
-            st.write(response.response)
-            st.session_state.messages.append({"role": "assistant", "content": response.response})
+submit = st.button("Find the Answer from the Invoice")
+if submit:
+    input_image_data = input_image_bytes(upload_image_file)
+    response = get_gemini_respone(input_prompt, input_image_data, user_input_prompt)
+    st.subheader("Response")
+    st.write(response)
