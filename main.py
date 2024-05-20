@@ -11,9 +11,7 @@ from llama_index.core import (
 )
 from streamlit_extras.app_logo import add_logo
 import google.generativeai as genai
-
-from transformers import AutoModelForQuestionAnswering, AutoTokenizer
-
+from llama_index.llms import HuggingFaceLLM
 
 # Create a new service context based on Hugging Face's Transformers
 
@@ -95,8 +93,27 @@ def load_data():
         embed_model = GeminiEmbedding(
             model_name="models/embedding-001", title="this is a document"
             )
+        llm = HuggingFaceLLM(
+    context_window=4096,
+    max_new_tokens=256,
+    generate_kwargs={"temperature": 0, "do_sample": False},
+    system_prompt=system_prompt,
+    query_wrapper_prompt=query_wrapper_prompt,
+    tokenizer_name="mistralai/Mistral-7B-v0.1",
+    model_name="mistralai/Mistral-7B-v0.1",
+    device_map="auto",
+    tokenizer_kwargs={"max_length": 4096},
+    # uncomment this if using CUDA to reduce memory usage
+    model_kwargs={
+        "torch_dtype": torch.float16, 
+        "llm_int8_enable_fp32_cpu_offload": True,
+        "bnb_4bit_quant_type": 'nf4',
+        "bnb_4bit_use_double_quant":True,
+        "bnb_4bit_compute_dtype":torch.bfloat16,
+        "load_in_4bit": True}
+)
         # service_context = ServiceContext.from_defaults(llm = Gemini(model="models/gemini-pro"), embed_model=embed_model,)
-        service_context = ServiceContext.from_defaults(llm=model, embed_model=embed_model)
+        service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
         return index
