@@ -49,30 +49,14 @@ with col1:
 
 
 
-# col1, col2 = st.columns([1, 3])
 
-# # Display the logo in the first column
-# with col1:
-#     st.image('scg_logo.jpg', width=100)
-
-# # Display the text in the second column
-# with col2:
 st.subheader("Hello! There, How can I help you Today-  :)")
    
 
 st.caption(":violet[what a] :orange[good day] :violet[to share what SCG is offering right now!]")
 
 
-# st.set_page_config(page_title="Chat with the Streamlit docs, powered by LlamaIndex", page_icon="🦙", layout="centered", initial_sidebar_state="auto", menu_items=None)
-# st.title("KMUTT & SCG Chatbot")
 
-# add sidebar buttons
-
-
-# add sidebar filters
-# st.sidebar.slider("Slider", 0, 100, 50)
-# st.sidebar.date_input("Date Input")
-# openai.api_key = st.secrets.openai_key
 GOOGLE_API_KEY=os.environ.get('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
@@ -93,14 +77,16 @@ def load_data():
             embed_model = GeminiEmbedding(
                 model_name="models/embedding-001", title="this is a document"
             )
-            
-            model = genai.GenerativeModel("gemini-pro")
 
-            # Check if GenerativeModel has system_prompt attribute
-            if hasattr(model, 'system_prompt'):
-                model.system_prompt = "You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."
+            genai.GenerativeModel(model_name='gemini-pro')
+
+            llm = Gemini(model_name="models/gemini-pro", api_key = "AIzaSyB02OFMsZeDsGGnJhTYm7_p8Z3Eci6ErbY")
+
             
-            service_context = ServiceContext.from_defaults(llm=model, embed_model=embed_model)
+           
+
+           
+            service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
             
             index = VectorStoreIndex.from_documents(docs, service_context=service_context)
             
