@@ -112,7 +112,7 @@ def load_data():
 #         "load_in_4bit": True}
 # )
         model = genai.GenerativeModel("gemini-pro")
-        service_context = ServiceContext.from_defaults(llm =model), embed_model=embed_model,)
+        service_context = ServiceContext.from_defaults(llm =model, embed_model=embed_model,)
         # service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
