@@ -111,7 +111,8 @@ def load_data():
 #         "bnb_4bit_compute_dtype":torch.bfloat16,
 #         "load_in_4bit": True}
 # )
-        service_context = ServiceContext.from_defaults(llm =genai.GenerativeModel("gemini-pro")), embed_model=embed_model,)
+        model = genai.GenerativeModel("gemini-pro")
+        service_context = ServiceContext.from_defaults(llm =model), embed_model=embed_model,)
         # service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
         index = VectorStoreIndex.from_documents(docs, service_context=service_context)
         
