@@ -263,5 +263,3 @@ if st.session_state.messages[-1]["role"] != "assistant":
             response = st.session_state.chat_engine.chat(st.session_state.messages[-1]["content"])
             st.write(response.response)
             st.session_state.messages.append({"role": "assistant", "content": response.response})
-
-
