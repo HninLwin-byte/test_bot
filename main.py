@@ -91,7 +91,7 @@ def load_data():
         # service_context = ServiceContext.from_defaults(llm=OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an expert on the Streamlit Python library and your job is to answer technical questions. Assume that all questions are related to the Streamlit Python library. Keep your answers technical and based on facts – do not hallucinate features."))
         embed_model = GeminiEmbedding(
             model_name="models/embedding-001", title="this is a document"
-#             )
+             )
 #         llm = HuggingFaceLLM(
 #     context_window=4096,
 #     max_new_tokens=256,
