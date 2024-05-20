@@ -242,7 +242,7 @@ def load_data():
         
         Settings.llm = llm
         Settings.chunk_size = 1024
-        index = VectorStoreIndex.from_documents(documents)
+        index = VectorStoreIndex.from_documents(docs)
 
         # service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
         # index = VectorStoreIndex.from_documents(docs, service_context=service_context)
